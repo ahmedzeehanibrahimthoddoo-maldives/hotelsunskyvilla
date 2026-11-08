@@ -1,37 +1,47 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { bookingTransitionPath } from "./lib/booking";
-import { absoluteUrl } from "./lib/seo";
+import { experienceGroups } from "./lib/experiences";
+import { rooms } from "./lib/rooms";
+import { site } from "./lib/site";
 
 export const metadata: Metadata = {
-  title: { absolute: "Thoddoo Sun Sky Villa | Luxury Guesthouse in Thoddoo, Maldives" },
+  title: { absolute: `${site.name} | Boutique guesthouse in Thoddoo, Maldives` },
   description:
-    "Stay at Thoddoo Sun Sky Villa, a boutique guesthouse on Thoddoo Island, Maldives with comfortable rooms, curated island experiences, and direct booking support.",
-  keywords: [
-    "Thoddoo guesthouse",
-    "hotel in Thoddoo Maldives",
-    "Thoddoo Island accommodation",
-    "where to stay in Thoddoo",
-  ],
+    "Stay at Hotel Sun Sky Villa, a warm boutique guesthouse on Thoddoo Island, Maldives. Comfortable rooms, island breakfasts, reef experiences and direct booking support.",
   alternates: { canonical: "/" },
-  openGraph: {
-    title: "Thoddoo Sun Sky Villa | Luxury Guesthouse on Thoddoo Island, Maldives",
-    description:
-      "Stay at Thoddoo Sun Sky Villa, a boutique guesthouse on Thoddoo Island, Maldives with comfortable rooms, curated island experiences, and direct booking support.",
-    url: absoluteUrl("/"),
-    siteName: "Thoddoo Sun Sky Villa",
-    images: [{ url: "/og.png", alt: "Thoddoo Sun Sky Villa in Thoddoo Island, Maldives" }],
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Thoddoo Sun Sky Villa | Luxury Guesthouse in Thoddoo, Maldives",
-    description:
-      "Stay at Thoddoo Sun Sky Villa, a boutique guesthouse on Thoddoo Island, Maldives with comfortable rooms, curated island experiences, and direct booking support.",
-    images: ["/og.png"],
-  },
 };
+
+const featuredExperiences = experienceGroups
+  .flatMap((group) => group.items)
+  .filter((item) =>
+    [
+      "Sandbank escape",
+      "Turtle snorkeling",
+      "Dolphin cruise",
+      "Sunset fishing",
+    ].includes(item.name),
+  );
+
+const reviews = [
+  {
+    quote:
+      "The kind of place where you arrive as a guest and leave as a friend. Breakfast in the sand courtyard was the best part of every day.",
+    name: "Elena & Marek",
+    origin: "Slovakia",
+  },
+  {
+    quote:
+      "Spotless room, wonderful local team and effortless help with transfers and snorkeling. Thoddoo is special, and this villa made it easy.",
+    name: "Sophie",
+    origin: "United Kingdom",
+  },
+  {
+    quote:
+      "We came for three nights and stayed for six. Quiet, warm and genuinely personal — exactly what we wanted from an island stay.",
+    name: "Daniel",
+    origin: "Germany",
+  },
+];
 
 export default function Home() {
   return (
@@ -40,70 +50,93 @@ export default function Home() {
         <img
           className="hero-image"
           src="/images/hero.webp"
-          alt="Thoddoo Sun Sky Villa on Thoddoo Island, Maldives"
+          alt="Aerial view of a palm-lined island in Thoddoo, Maldives"
           width={1800}
           height={1013}
           loading="eager"
-          decoding="async"
           fetchPriority="high"
+          decoding="async"
         />
         <div className="hero-shade" />
         <div className="shell hero-copy">
-          <span className="eyebrow light">Boutique island stay · Thoddoo, Maldives</span>
-          <h1>Thoddoo Sun Sky Villa on Thoddoo Island, Maldives</h1>
-          <p>
-            A welcoming nine-room guesthouse where warm Maldivian hospitality,
-            comfortable accommodation, island experiences, and direct booking support
-            come together.
+          <span className="eyebrow light">Thoddoo Island · Maldives</span>
+          <h1>
+            A quiet island villa,
+            <br />
+            <em>where the sky meets the sea.</em>
+          </h1>
+          <p className="hero-lede">
+            Hotel Sun Sky Villa is a small, design-led guesthouse on Thoddoo — close to the
+            beach, shaped by palm shade and sandy paths, and run with the kind of welcome that
+            makes you want to stay a little longer.
           </p>
           <div className="actions">
-            <a className="btn btn-gold" href={bookingTransitionPath}>
-              Check availability
-            </a>
-            <Link className="btn btn-glass" href="/stay">
-              Explore your stay
+            <Link className="btn btn-gold" href="/booking">
+              Plan your stay
             </Link>
+            <Link className="btn btn-glass" href="/stay">
+              Explore the rooms
+            </Link>
+          </div>
+          <div className="hero-meta">
+            <div>
+              From
+              <strong>USD 85 / night</strong>
+            </div>
+            <div>
+              Included
+              <strong>Breakfast & Wi-Fi</strong>
+            </div>
+            <div>
+              Airport
+              <strong>Speedboat assistance</strong>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="quick-strip">
+      <section className="stats" aria-label="At a glance">
         <div>
-          <b>From USD 85</b>
-          <span>per room</span>
+          <strong>4</strong>
+          <span>Room categories</span>
         </div>
         <div>
-          <b>Breakfast included</b>
-          <span>fresh island mornings</span>
+          <strong>3 min</strong>
+          <span>To the beach</span>
         </div>
         <div>
-          <b>Direct support</b>
-          <span>WhatsApp concierge</span>
+          <strong>Reef</strong>
+          <span>Snorkeling on the doorstep</span>
         </div>
         <div>
-          <b>9 rooms</b>
-          <span>personal hospitality</span>
+          <strong>Direct</strong>
+          <span>Hosted by the family</span>
         </div>
       </section>
 
       <section className="section shell split">
-        <div>
-          <span className="eyebrow">Stay close to everything</span>
-          <h2>A calm base for discovering Thoddoo</h2>
+        <div className="split-copy">
+          <span className="eyebrow">The villa</span>
+          <h2>Small by design. Warm by nature.</h2>
           <p>
-            Rest in bright, comfortable rooms, enjoy breakfast in the garden, and let our
-            local team help coordinate transfers and island activities during your holiday.
+            Sun Sky Villa began as a family home and still feels like one. There are only a
+            handful of rooms, a sandy courtyard for breakfast, and a team who know the island
+            by heart — the best reef corners, the quietest beach hours, the fishermen who bring
+            in the evening catch.
           </p>
-          <Link className="text-link" href="/stay">
-            Discover the rooms →
+          <p>
+            We keep things simple and thoughtful: cool rooms, fresh linen, honest local food,
+            and help with the details that make a Maldives trip feel effortless.
+          </p>
+          <Link className="text-link" href="/about">
+            Our story →
           </Link>
         </div>
         <img
-          className="rounded"
-          src="/images/room-hero.webp"
-          alt="Guest room at Thoddoo Sun Sky Villa"
-          width={1400}
-          height={933}
+          src="/images/garden.webp"
+          alt="The garden and villa entrance at Sun Sky Villa"
+          width={1600}
+          height={787}
           loading="lazy"
           decoding="async"
         />
@@ -113,87 +146,161 @@ export default function Home() {
         <div className="shell">
           <div className="section-head">
             <div>
-              <span className="eyebrow">Curated for your holiday</span>
-              <h2>Signature experiences</h2>
+              <span className="eyebrow">Sleep</span>
+              <h2>Rooms that feel like a deep breath</h2>
             </div>
-            <Link className="text-link" href="/experiences">
-              Explore all experiences →
+            <Link className="text-link" href="/stay">
+              All rooms & rates →
             </Link>
           </div>
-          <div className="card-grid three">
-            <article className="image-card">
-              <img
-                src="/images/experience-half-day-trip.webp"
-                alt="Half Day Trip excursion"
-                width={1200}
-                height={1600}
-                loading="lazy"
-                decoding="async"
-              />
-              <div>
-                <h3>Half Day Trip</h3>
-                <p>A compact island-and-sea outing arranged for Thoddoo Sun Sky Villa guests.</p>
-              </div>
-            </article>
-            <article className="image-card">
-              <img
-                src="/images/experience-manta-snorkeling.webp"
-                alt="Manta Snorkeling excursion"
-                width={1400}
-                height={788}
-                loading="lazy"
-                decoding="async"
-              />
-              <div>
-                <h3>Manta Snorkeling</h3>
-                <p>A memorable marine-life experience arranged around local conditions.</p>
-              </div>
-            </article>
-            <article className="image-card">
-              <img
-                src="/images/experience-sandbank-trip.webp"
-                alt="Sandbank Trip excursion"
-                width={1400}
-                height={788}
-                loading="lazy"
-                decoding="async"
-              />
-              <div>
-                <h3>Sandbank Trip</h3>
-                <p>Scenic time on a sandbank with details confirmed by our team.</p>
-              </div>
-            </article>
-            <article className="image-card">\n              <img
-                src="/images/experience-dolphin-cruise.webp"
-                alt="Dolphin Cruise excursion"
-                width={1400}
-                height={788}
-                loading="lazy"
-                decoding="async"
-              />
-              <div>
-                <h3>Dolphin Cruise</h3>
-                <p>A relaxed ocean cruise ideal for golden-hour island evenings.</p>
-              </div>
-            </article>
+          <div className="card-grid four">
+            {rooms.map((room) => (
+              <article className="image-card" key={room.slug}>
+                <Link href={`/stay#${room.slug}`} aria-label={room.name}>
+                  <img
+                    src={room.images[0]}
+                    alt={room.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="image-card-body">
+                    <span className="card-tag">{room.kicker}</span>
+                    <h3>{room.name}</h3>
+                    <p>{room.summary}</p>
+                    <p className="room-price">
+                      From <strong>${room.price}</strong> / night
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="section shell cta">
-        <span className="eyebrow light">Book with confidence</span>
-        <h2>Your Thoddoo story starts here.</h2>
-        <p>
-          Reserve directly or speak with our team for rooms, transfers, and experiences
-          arranged for Thoddoo Sun Sky Villa guests.
-        </p>
-        <div className="actions">
-          <a className="btn btn-gold" href={bookingTransitionPath}>
-            Book direct
-          </a>
-          <a className="btn btn-glass" href="https://wa.me/9607699946">
-            WhatsApp us
-          </a>
+      <section className="section shell">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow">Days on the water</span>
+            <h2>Experiences, arranged for you</h2>
+          </div>
+          <Link className="text-link" href="/experiences">
+            Explore everything →
+          </Link>
+        </div>
+        <div className="card-grid four">
+          {featuredExperiences.map((item) => (
+            <article className="experience-card" key={item.name}>
+              <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
+              <div className="experience-body">
+                <span className="card-tag">{item.tag}</span>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+                <div className="experience-meta">
+                  <span>{item.duration}</span>
+                  <span>From the villa</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section section-cream">
+        <div className="shell split reverse">
+          <img
+            src="/images/breakfast.webp"
+            alt="Fresh island breakfast with fruit, eggs and Maldivian flatbread"
+            width={1600}
+            height={1200}
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="split-copy">
+            <span className="eyebrow">At the table</span>
+            <h2>Breakfast under the palms</h2>
+            <p>
+              Mornings at the villa are unhurried. Fresh fruit, eggs, island bread, strong
+              coffee and a table in the sand — served whenever you surface, not when a buffet
+              clock says so.
+            </p>
+            <p>
+              In the evening we can arrange a private beach dinner, a barbecue of the day's
+              catch, or a quiet table in the courtyard.
+            </p>
+            <Link className="text-link" href="/contact">
+              Ask about dining →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section shell">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow">A glimpse</span>
+            <h2>Life at the villa</h2>
+          </div>
+          <Link className="text-link" href="/gallery">
+            Full gallery →
+          </Link>
+        </div>
+        <div className="gallery-grid">
+          {[
+            "/images/real/room-vaulted.jpg",
+            "/images/real/guest-coconut.jpg",
+            "/images/real/dining-indoor.jpg",
+            "/images/real/room-swan.jpg",
+            "/images/sandbank.webp",
+            "/images/real/bathroom-2.jpg",
+          ].map((src) => (
+            <div className="gallery-item" key={src}>
+              <img src={src} alt="" loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section section-dark">
+        <div className="shell">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow light">Guest notes</span>
+              <h2>Kind words, honestly earned</h2>
+            </div>
+          </div>
+          <div className="review-grid">
+            {reviews.map((review) => (
+              <article className="review-card" key={review.name}>
+                <div className="review-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
+                </div>
+                <blockquote>“{review.quote}”</blockquote>
+                <cite>
+                  {review.name} · {review.origin}
+                </cite>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section shell">
+        <div className="cta">
+          <span className="eyebrow light">Stay with us</span>
+          <h2>Your island story starts with a simple hello.</h2>
+          <p>
+            Tell us your dates and we'll help with the room, the speedboat and the small
+            details. Book direct for the warmest welcome — and the best available rate.
+          </p>
+          <div className="actions">
+            <Link className="btn btn-gold" href="/booking">
+              Send an enquiry
+            </Link>
+            <a className="btn btn-outline-light" href={site.whatsapp}>
+              WhatsApp us
+            </a>
+          </div>
         </div>
       </section>
     </>

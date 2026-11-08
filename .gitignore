@@ -5,3 +5,6 @@ dist/
 .wrangler/
 .openai/
 build/
+.env*
+
+out/

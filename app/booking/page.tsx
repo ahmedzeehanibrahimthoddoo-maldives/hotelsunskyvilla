@@ -1,56 +1,107 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import JsonLd from "../components/JsonLd";
 import PageHero from "../components/PageHero";
-import { officialBookingEngineUrl } from "../lib/booking";
-import { buildBreadcrumbList, createPageMetadata } from "../lib/seo";
+import InquiryForm from "../components/InquiryForm";
+import { absoluteUrl, site } from "../lib/site";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Secure Booking Transition",
-  description: "Continue to the official Hotel Sun Sky Villa booking engine.",
-  path: "/booking",
-  robots: {
-    index: false,
-    follow: false,
+export const metadata: Metadata = {
+  title: "Booking enquiry",
+  description:
+    "Check availability at Hotel Sun Sky Villa, Thoddoo. Send a direct booking enquiry and our team will reply with the best rate.",
+  alternates: { canonical: "/booking" },
+  openGraph: {
+    title: "Booking enquiry | Hotel Sun Sky Villa",
+    description: "Send a direct booking enquiry for Hotel Sun Sky Villa in Thoddoo, Maldives.",
+    url: absoluteUrl("/booking"),
+    images: [{ url: "/images/real/courtyard.jpg", alt: "Courtyard at Sun Sky Villa" }],
   },
-});
+};
 
-const breadcrumbData = buildBreadcrumbList([{ name: "Booking", path: "/booking" }]);
-
-export default function Booking() {
+export default function BookingPage() {
   return (
     <>
-      <JsonLd data={breadcrumbData} />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.setTimeout(function(){window.location.replace(${JSON.stringify(officialBookingEngineUrl)});},2000);`,
-        }}
-      />
       <PageHero
-        title="Redirecting to secure booking"
-        kicker="Booking"
-        image="/images/reception.webp"
+        kicker="Book direct"
+        title="Let's find your dates."
+        image="/images/room-wide.webp"
       >
         <p>
-          You will be redirected to our official AIOSELL booking engine in 2 seconds.
+          Tell us when you'd like to arrive and we'll reply personally with availability and the
+          best direct rate. No payment is taken through this form.
         </p>
       </PageHero>
+
       <section className="section shell">
-        <div className="contact-card">
-          <span className="eyebrow">Official booking engine</span>
-          <h2>Continue your reservation</h2>
-          <p>
-            If the redirect does not start automatically, use the secure booking button
-            below.
-          </p>
-          <div className="actions">
-            <a className="btn btn-gold" href={officialBookingEngineUrl}>
-              Continue to Secure Booking
-            </a>
-            <Link className="btn btn-outline" href="/contact">
-              Contact our team
-            </Link>
+        <div className="contact-grid">
+          <div>
+            <span className="eyebrow">Direct & personal</span>
+            <h2>Why book direct?</h2>
+            <div className="contact-list">
+              <div className="contact-item">
+                <strong>Best available rate</strong>
+                <span>We match or beat the booking sites.</span>
+              </div>
+              <div className="contact-item">
+                <strong>Real local advice</strong>
+                <span>Transfers, rooms and reef days, sorted by the people who live here.</span>
+              </div>
+              <div className="contact-item">
+                <strong>Flexible help</strong>
+                <span>Flight delays, late boats and changed plans — just message us.</span>
+              </div>
+            </div>
+            <div className="info-card">
+              <h3>Prefer to talk?</h3>
+              <p>
+                WhatsApp{" "}
+                <a className="text-link" href={site.whatsapp}>
+                  {site.phone}
+                </a>
+              </p>
+              <p>
+                Email{" "}
+                <a className="text-link" href={`mailto:${site.email}`}>
+                  {site.email}
+                </a>
+              </p>
+              <p style={{ marginTop: "0.8rem", fontSize: "0.82rem" }}>
+                Check-in {site.checkIn} · Check-out {site.checkOut}
+              </p>
+            </div>
           </div>
+
+          <div className="inquiry-card">
+            <h3 style={{ marginBottom: "1.2rem" }}>Stay enquiry</h3>
+            <InquiryForm />
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-cream">
+        <div className="shell card-grid three">
+          <article className="info-card">
+            <h3>Instant booking</h3>
+            <p>
+              Prefer to confirm immediately? Our online booking engine shows live availability
+              and accepts payment.
+            </p>
+            <a className="text-link" href={site.bookingEngine} target="_blank" rel="noopener noreferrer">
+              Book online →
+            </a>
+          </article>
+          <article className="info-card">
+            <h3>Transfers</h3>
+            <p>
+              Thoddoo is a speedboat ride from Malé. Share your flight number and we'll suggest
+              the best connection and meet you at the jetty.
+            </p>
+          </article>
+          <article className="info-card">
+            <h3>Good to know</h3>
+            <p>
+              Rates are per room per night, breakfast included. Children are welcome; extra beds
+              and cots can be arranged on request.
+            </p>
+          </article>
         </div>
       </section>
     </>

@@ -2,36 +2,37 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Notice from "./components/Notice";
 import JsonLd from "./components/JsonLd";
-import {
-  businessEmail,
-  businessLocation,
-  businessPhone,
-  createPageMetadata,
-  siteName,
-  siteUrl,
-} from "./lib/seo";
+import { absoluteUrl, site } from "./lib/site";
 
-const siteTitle = "Thoddoo Sun Sky Villa | Luxury Guesthouse in Thoddoo, Maldives";
-const siteDescription =
-  "A warm boutique guesthouse on Thoddoo Island, Maldives with comfortable rooms, island experiences, and direct booking support.";
-const rootSeo = createPageMetadata({
-  title: siteTitle,
-  description: siteDescription,
-  path: "/",
-});
+const defaultTitle = `${site.name} | Boutique guesthouse in Thoddoo, Maldives`;
+const defaultDescription =
+  "A warm, design-led island villa in Thoddoo, Maldives with comfortable rooms, breakfast, reef experiences and direct booking support.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(site.url),
   title: {
-    default: siteTitle,
-    template: "%s | Thoddoo Sun Sky Villa",
+    default: defaultTitle,
+    template: `%s | ${site.name}`,
   },
-  description: siteDescription,
-  alternates: rootSeo.alternates,
-  openGraph: rootSeo.openGraph,
-  twitter: rootSeo.twitter,
+  description: defaultDescription,
+  applicationName: site.name,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: defaultTitle,
+    description: defaultDescription,
+    url: absoluteUrl("/"),
+    siteName: site.name,
+    images: [{ url: "/images/hero.webp", alt: `${site.name}, Thoddoo, Maldives` }],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/images/hero.webp"],
+  },
   icons: {
     icon: "/images/favicon.png",
     shortcut: "/images/favicon.png",
@@ -39,6 +40,48 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({children}:{children:React.ReactNode}) {
-  return <html lang="en"><body><JsonLd data={[{"@context":"https://schema.org","@type":"Hotel","name":siteName,"url":siteUrl,"image":[`${siteUrl}/og.png`],"description":siteDescription,"email":businessEmail,"telephone":businessPhone,"address":{"@type":"PostalAddress","addressLocality":"Thoddoo Island","addressCountry":"MV"}},{"@context":"https://schema.org","@type":"WebSite","name":siteName,"url":siteUrl,"description":`Official website of ${siteName} in ${businessLocation}.`}]} /><Notice/><Header/><main>{children}</main><Footer/></body></html>;
+const hotelSchema = {
+  "@context": "https://schema.org",
+  "@type": "Hotel",
+  name: site.name,
+  url: site.url,
+  image: [`${site.url}/images/hero.webp`],
+  description: defaultDescription,
+  email: site.email,
+  telephone: site.phone,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Thoddoo Island",
+    addressRegion: "Alif Alif Atoll",
+    addressCountry: "MV",
+  },
+  starRating: { "@type": "Rating", ratingValue: "4" },
+  amenityFeature: [
+    "Free Wi-Fi",
+    "Air conditioning",
+    "Breakfast",
+    "Private bathroom",
+    "Airport transfer assistance",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: site.url,
+  description: `Official website of ${site.name} in ${site.location}.`,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <JsonLd data={[hotelSchema, websiteSchema]} />
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
 }

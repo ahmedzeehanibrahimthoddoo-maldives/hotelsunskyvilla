@@ -1,57 +1,77 @@
-import JsonLd from "../components/JsonLd";
+import type { Metadata } from "next";
 import PageHero from "../components/PageHero";
-import { bookingTransitionPath } from "../lib/booking";
-import { buildBreadcrumbList, createPageMetadata } from "../lib/seo";
+import InquiryForm from "../components/InquiryForm";
+import JsonLd from "../components/JsonLd";
+import { absoluteUrl, site } from "../lib/site";
 
-export const metadata = createPageMetadata({
-  title: "Contact & Reservations",
+export const metadata: Metadata = {
+  title: "Contact",
   description:
-    "Contact Thoddoo Sun Sky Villa for room reservations, transfer planning, and island experience enquiries on Thoddoo Island, Maldives.",
-  path: "/contact",
-  keywords: [
-    "Thoddoo Sun Sky Inn contact",
-    "Thoddoo hotel reservation",
-    "guesthouse Thoddoo WhatsApp",
+    "Contact Hotel Sun Sky Villa in Thoddoo, Maldives — WhatsApp, email and booking enquiries.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact | Hotel Sun Sky Villa",
+    description: "Get in touch with Hotel Sun Sky Villa in Thoddoo, Maldives.",
+    url: absoluteUrl("/contact"),
+    images: [{ url: "/images/hero.webp", alt: "Thoddoo, Maldives" }],
+  },
+};
+
+const breadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Contact", item: absoluteUrl("/contact") },
   ],
-});
+};
 
-const breadcrumbData = buildBreadcrumbList([{ name: "Contact", path: "/contact" }]);
-
-export default function Contact() {
+export default function ContactPage() {
   return (
     <>
-      <JsonLd data={breadcrumbData} />
-      <PageHero title="Let's plan your stay" kicker="Contact" image="/images/reception.webp">
-        <p>Speak directly with our team for reservations, transfers and island experiences.</p>
+      <JsonLd data={breadcrumbs} />
+      <PageHero kicker="Say hello" title="We're here, on the island." image="/images/hero.webp">
+        <p>
+          Questions about rooms, transfers or the reef? Message us on WhatsApp for the quickest
+          reply, or send an enquiry below.
+        </p>
       </PageHero>
-      <section className="section shell contact-grid">
-        <div>
-          <span className="eyebrow">Official contacts</span>
-          <h2>Thoddoo Sun Sky Villa</h2>
-          <p>Thoddoo Island, Maldives</p>
-          <a className="contact-line" href="https://wa.me/9607699946">
-            WhatsApp: +960 769 9946
-          </a>
-          <a className="contact-line" href="mailto:reservation@thoddoosunskyvilla.com">
-            reservation@thoddoosunskyvilla.com
-          </a>
-          <p>Check-in 14:00 · Check-out 11:00</p>
-        </div>
-        <div className="contact-card">
-          <h3>Quick enquiry</h3>
-          <p>
-            For the fastest answer, send your dates, guest count and room preference
-            through WhatsApp.
-          </p>
-          <a
-            className="btn btn-gold"
-            href="https://wa.me/9607699946?text=Hello%20Thoddoo%20Sun%20Sky%20Villa%2C%20I%20would%20like%20to%20check%20availability."
-          >
-            Start enquiry
-          </a>
-          <a className="btn btn-outline" href={bookingTransitionPath}>
-            Open booking engine
-          </a>
+
+      <section className="section shell">
+        <div className="contact-grid">
+          <div>
+            <span className="eyebrow">Contact</span>
+            <h2>Hotel Sun Sky Villa</h2>
+            <p className="lede">{site.address}</p>
+            <div className="contact-list">
+              <div className="contact-item">
+                <strong>WhatsApp / phone</strong>
+                <a href={site.whatsapp}>{site.phone}</a>
+              </div>
+              <div className="contact-item">
+                <strong>Email</strong>
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+              </div>
+              <div className="contact-item">
+                <strong>Check-in / check-out</strong>
+                <span>
+                  {site.checkIn} / {site.checkOut}
+                </span>
+              </div>
+            </div>
+            <div className="info-card">
+              <h3>Getting to Thoddoo</h3>
+              <p>
+                Fly into Velana International Airport (MLE), then take a speedboat to Thoddoo.
+                Send us your flight details and we'll help with the connection.
+              </p>
+            </div>
+          </div>
+
+          <div className="inquiry-card">
+            <h3 style={{ marginBottom: "1.2rem" }}>Send a message</h3>
+            <InquiryForm />
+          </div>
         </div>
       </section>
     </>

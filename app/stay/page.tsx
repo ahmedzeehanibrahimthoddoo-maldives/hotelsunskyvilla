@@ -1,123 +1,162 @@
-import JsonLd from "../components/JsonLd";
+import Link from "next/link";
+import type { Metadata } from "next";
 import PageHero from "../components/PageHero";
-import { bookingTransitionPath } from "../lib/booking";
-import { buildBreadcrumbList, createPageMetadata } from "../lib/seo";
+import JsonLd from "../components/JsonLd";
+import InquiryForm from "../components/InquiryForm";
+import { rooms } from "../lib/rooms";
+import { absoluteUrl, site } from "../lib/site";
 
-export const metadata = createPageMetadata({
-  title: "Luxury Rooms & Stay in Thoddoo",
+export const metadata: Metadata = {
+  title: "Rooms & rates",
   description:
-    "Explore luxury rooms at Hotel Sun Sky Villa for a premium stay in Thoddoo, Maldives with breakfast, Wi-Fi, and direct support.",
-  path: "/stay",
-  keywords: [
-    "luxury rooms in Thoddoo",
-    "Thoddoo accommodation",
-    "Thoddoo guesthouse rooms",
-    "stay in Thoddoo Maldives",
+    "Comfortable, design-led rooms at Hotel Sun Sky Villa in Thoddoo, Maldives — deluxe doubles, family rooms, garden rooms and a sunset suite.",
+  alternates: { canonical: "/stay" },
+  openGraph: {
+    title: "Rooms & rates | Hotel Sun Sky Villa",
+    description:
+      "Comfortable, design-led rooms on Thoddoo Island with breakfast, air conditioning and direct booking support.",
+    url: absoluteUrl("/stay"),
+    images: [{ url: "/images/real/room-vaulted.jpg", alt: "Deluxe room at Sun Sky Villa" }],
+  },
+};
+
+const breadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Stay", item: absoluteUrl("/stay") },
   ],
-});
+};
 
-const breadcrumbData = buildBreadcrumbList([{ name: "Stay", path: "/stay" }]);
+const roomSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: rooms.map((room, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "HotelRoom",
+      name: room.name,
+      description: room.summary,
+      occupancy: { "@type": "QuantitativeValue", maxValue: room.guests },
+      image: `${site.url}${room.images[0]}`,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "USD",
+        price: room.price,
+        availability: "https://schema.org/InStock",
+      },
+    },
+  })),
+};
 
-export default function Stay() {
+export default function StayPage() {
   return (
     <>
-      <JsonLd data={breadcrumbData} />
+      <JsonLd data={[breadcrumbs, roomSchema]} />
       <PageHero
-        title="Rest easy in the heart of Thoddoo"
         kicker="Your stay"
-        image="/images/room-wide.webp"
+        title="Rest easy, close to the sea."
+        image="/images/room-hero.webp"
       >
-        <p>Premium rooms, thoughtful essentials and personal island hospitality.</p>
+        <p>
+          Four simple, considered room categories — each with air conditioning, a private
+          bathroom and breakfast included. Choose the one that fits your trip.
+        </p>
       </PageHero>
 
       <section className="section shell">
-        <div className="room-layout">
-          <div>
-            <img
-              className="rounded"
-              src="/images/room-hero.webp"
-              alt="Deluxe Double Room at Hotel Sun Sky Villa"
-              width={1400}
-              height={933}
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="thumb-row">
-              <img
-                src="/images/room-detail.webp"
-                alt="Room detail"
-                width={1400}
-                height={933}
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src="/images/bathroom.webp"
-                alt="Private bathroom"
-                width={1400}
-                height={1929}
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src="/images/garden-room.webp"
-                alt="Garden room view"
-                width={1400}
-                height={933}
-                loading="lazy"
-                decoding="async"
-              />
+        {rooms.map((room) => (
+          <article className="room-card" id={room.slug} key={room.slug}>
+            <div className="room-card-media">
+              {room.images.map((src, index) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={`${room.name} — view ${index + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ))}
+            </div>
+            <div className="room-card-body">
+              <span className="eyebrow">{room.kicker}</span>
+              <h3>{room.name}</h3>
+              <div className="room-price">
+                From <strong>${room.price}</strong> / night · {room.guests} · {room.bed}
+              </div>
+              <p>{room.description}</p>
+              <ul className="feature-list">
+                {room.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+              <div className="actions">
+                <Link className="btn btn-gold" href="/booking">
+                  Enquire about this room
+                </Link>
+                <Link className="btn btn-outline" href="/experiences">
+                  See experiences
+                </Link>
+              </div>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="section section-cream">
+        <div className="shell">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">Good to know</span>
+              <h2>The little things, taken care of</h2>
             </div>
           </div>
-          <div className="room-copy">
-            <span className="eyebrow">From USD 120</span>
-            <h2>Deluxe Double Room</h2>
-            <p>
-              A bright, inviting room designed for couples and solo travellers seeking a
-              relaxed island stay.
-            </p>
-            <ul className="feature-list">
-              <li>Queen bed</li>
-              <li>Air conditioning</li>
-              <li>Private bathroom</li>
-              <li>Wi-Fi</li>
-              <li>Breakfast included</li>
-              <li>Daily housekeeping</li>
-            </ul>
-            <div className="actions compact-actions">
-              <a className="btn btn-gold" href={bookingTransitionPath}>
-                Check availability
-              </a>
-              <a className="btn btn-outline" href="/experiences">
-                Explore experiences
-              </a>
-              <a className="btn btn-outline" href="/contact">
-                Contact reservations
-              </a>
-            </div>
+          <div className="card-grid three">
+            <article className="info-card">
+              <h3>Breakfast, included</h3>
+              <p>
+                Fresh fruit, eggs, island bread and coffee served in the courtyard each
+                morning. Early departure? We'll pack something for the boat.
+              </p>
+            </article>
+            <article className="info-card">
+              <h3>Transfers made easy</h3>
+              <p>
+                Thoddoo is reached by speedboat from Malé. Share your flight details and we'll
+                coordinate the transfer and meet you at the jetty.
+              </p>
+            </article>
+            <article className="info-card">
+              <h3>Room to breathe</h3>
+              <p>
+                Daily housekeeping, fresh beach towels, free Wi-Fi and air conditioning in
+                every room. Cots and extra beds can be arranged on request.
+              </p>
+            </article>
           </div>
         </div>
       </section>
 
-      <section className="section section-cream">
-        <div className="shell split reverse">
-          <img
-            className="rounded"
-            src="/images/breakfast.webp"
-            alt="Breakfast at Hotel Sun Sky Villa"
-            width={1179}
-            height={1539}
-            loading="lazy"
-            decoding="async"
-          />
-          <div>
-            <span className="eyebrow">Island mornings</span>
-            <h2>Breakfast made part of the experience</h2>
-            <p>
-              Start the day with fresh fruit, warm dishes and easy conversation before
-              heading to the beach or the ocean.
-            </p>
-          </div>
+      <section className="section shell split">
+        <div className="split-copy">
+          <span className="eyebrow">Check availability</span>
+          <h2>Tell us your dates.</h2>
+          <p>
+            We'll reply with availability, the best direct rate and anything else you need to
+            know. No payment is taken through this form.
+          </p>
+          <p>
+            Prefer to book instantly? Use our{" "}
+            <a className="text-link" href={site.bookingEngine} target="_blank" rel="noopener noreferrer">
+              online booking engine
+            </a>
+            .
+          </p>
+        </div>
+        <div className="inquiry-card">
+          <InquiryForm compact />
         </div>
       </section>
     </>

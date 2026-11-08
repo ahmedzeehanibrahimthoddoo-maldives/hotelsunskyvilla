@@ -1,1 +1,27 @@
-export default function PageHero({title,kicker,image,children}:{title:string;kicker:string;image:string;children?:React.ReactNode}){return <section className="page-hero" style={{backgroundImage:`linear-gradient(90deg,rgba(7,28,45,.78),rgba(7,28,45,.18)),url(${image})`}}><div className="shell"><span className="eyebrow light">{kicker}</span><h1>{title}</h1>{children}</div></section>}
+import type { ReactNode } from "react";
+
+export default function PageHero({
+  kicker,
+  title,
+  image,
+  children,
+  align = "left",
+}: {
+  kicker: string;
+  title: string;
+  image: string;
+  children?: ReactNode;
+  align?: "left" | "center";
+}) {
+  return (
+    <section className={`page-hero ${align === "center" ? "is-center" : ""}`}>
+      <img src={image} alt="" aria-hidden="true" className="page-hero-image" />
+      <div className="page-hero-shade" />
+      <div className="shell page-hero-copy">
+        <span className="eyebrow light">{kicker}</span>
+        <h1>{title}</h1>
+        {children ? <div className="page-hero-lede">{children}</div> : null}
+      </div>
+    </section>
+  );
+}

@@ -1,6 +1,4 @@
-type JsonLdValue = Record<string, unknown> | Array<Record<string, unknown>>;
-
-export default function JsonLd({ data }: { data: JsonLdValue }) {
+export default function JsonLd({ data }: { data: object | object[] }) {
   return (
     <script
       type="application/ld+json"

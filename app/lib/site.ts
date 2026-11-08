@@ -3,7 +3,7 @@ export const site = {
   shortName: "Sun Sky Villa",
   tagline: "A boutique island hideaway in Thoddoo, Maldives",
   url: "https://www.thoddoosunskyvilla.com",
-  email: "ahmedthoddoo@gmail.com",
+  email: "reservation@thoddoosunskyvilla.com",
   phone: "+960 769 9946",
   phoneDial: "9607699946",
   whatsapp: "https://wa.me/9607699946",

@@ -46,9 +46,15 @@ Deployments run from the GitHub repository `hotelsunskyvilla` on push to `main`.
 
 ## Contact email
 
-Enquiries currently go to `ahmedthoddoo@gmail.com`. Neither domain has MX records,
-so `reservation@…` addresses do not receive mail until a mailbox or forwarding is
-configured.
+`reservation@thoddoosunskyvilla.com` and `reservation@hotelsunskyvilla.com` forward
+to `ahmedthoddoo@gmail.com` through ForwardEmail's free DNS-only forwarding.
+
+- MX: `mx1.forwardemail.net` (10), `mx2.forwardemail.net` (20)
+- TXT: `forward-email=reservation:ahmedthoddoo@gmail.com`
+- TXT: `v=spf1 a include:spf.forwardemail.net -all`
+
+The free plan forwards incoming mail only; sending *as* these addresses would
+need Gmail "Send mail as" plus an SPF update, or a paid mailbox provider.
 
 ## Booking enquiries
 
